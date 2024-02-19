@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>To-Do List</title>
+  <meta charset="UTF-8" />
+  <!-- <meta name="viewport" content="width=device-width" /> -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link rel="icon" href="{{ url_for('static', filename='todolist-logo.jpeg') }}" type="image/x-icon">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}" />
+</head>
+
+<body>
+
+  <section class="container">
+    
+    <div class="heading">
+      <img class="heading__img" src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/756881/laptop.svg">
+      <h1 class="heading__title">To-Do List  - MongoDb</h1>
+    </div>
+
+    <form class="form" action="{{ url_for('insert') }}" method="POST">
+      <div>
+        <label class="form__label" for="todo">~ Today I need to ~</label>
+        <input class="form__input"
+              type="text"
+              id="task"
+              name="task"
+              size="30"
+              required>
+        <button class="button" type="submit" ><span>Submit</span></button>
+      </div>
+    </form>
+
+
+    <div>
+      <ul class="toDoList">
+        {% for document in documents %}
+                        <li class="grid grid-cols-11 gap-4 text-center">
+                            <div class="p-2">{{ loop.index }}</div>
+                            <div class="p-2 col-span-8 text-black text-left">{{ document.task | title }}</div>
+                            <div class="p-2 text-green-600 font-bold ">
+                                <!-- <a href="{{ url_for('edit_status', id=document._id, new_status='off') }}" class="text-blue-500 ml-2"><i class="fa-regular {{ 'fa-square-check' if not hover else 'fa-square' }}"></i></a> -->
+                                <a href="{{ url_for('edit_status', id=document._id, new_status='off') }}" class="text-blue-500 ml-2 group flex pl-6">
+                                    <i class="fa-regular fa-square text-green-600 group-hover:hidden"></i>
+                                    <i class="fa-regular fa-square-check text-green-600 hidden group-hover:block"></i>
+                                </a>
+                                
+                            </div>
+                            <div class="p-2">
+                                <a href="{{ url_for('delete', id=document._id) }}" class="text-red-500"><i class="fa-solid fa-trash text-red-600 text-xl hover:text-red-700"></i></a>
+                            </div>
+                        </li>
+                    {% endfor %}
+      </ul>
+    </div>
+
+    <div class="mt-20">
+      <label class="form__label" for="todo">~ Completed Task ~</label>
+
+      <ul class="toDoList">
+        {% for document in done %}
+          <li class="grid grid-cols-11 gap-4 text-center">
+              <div class="p-2">{{ loop.index }}</div>
+              <div class="p-2 col-span-8 text-black text-left">{{ document.task | title }}</div>
+              <div class="p-2 text-green-600 font-bold ">
+                  <a href="{{ url_for('edit_status', id=document._id, new_status='on') }}" class="text-blue-500 ml-2 group flex pl-6">
+                      <i class="fa-regular fa-square text-red-600 group-hover:hidden"></i>
+                      <i class="fa-regular fa-square-xmark text-red-600 hidden group-hover:block"></i>
+                      <!-- <i class="fa-solid fa-square-xmark"></i> -->
+                  </a>
+              </div>
+                  
+              <!-- <div class="p-2">
+                  <a href="{{ url_for('delete', id=document._id) }}" class="text-red-500"><i class="fa-solid fa-trash text-red-600 text-xl hover:text-red-700"></i></a>
+              </div> -->
+          </li>
+        {% endfor %}
+
+      </ul>
+    </div>
+
+  </section>
+
+
+  <script src="script.js"></script>
+</body>
+
+
+
+</html>

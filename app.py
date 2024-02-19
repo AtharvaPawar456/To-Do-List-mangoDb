@@ -40,7 +40,7 @@ def index():
     documents = list(collection.find({"status": "on"}))
     done = list(collection.find({"status": "off"}))
 
-    return render_template('index.html', documents=documents, done=done)
+    return render_template('home.html', documents=documents, done=done)
 
 @app.route('/insert', methods=['POST'])
 def insert():
