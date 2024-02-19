@@ -38,23 +38,41 @@
 
     <div>
       <ul class="toDoList">
+
+
+
         {% for document in documents %}
-                        <li class="grid grid-cols-11 gap-4 text-center">
-                            <div class="p-2">{{ loop.index }}</div>
-                            <div class="p-2 col-span-8 text-black text-left">{{ document.task | title }}</div>
-                            <div class="p-2 text-green-600 font-bold ">
-                                <!-- <a href="{{ url_for('edit_status', id=document._id, new_status='off') }}" class="text-blue-500 ml-2"><i class="fa-regular {{ 'fa-square-check' if not hover else 'fa-square' }}"></i></a> -->
-                                <a href="{{ url_for('edit_status', id=document._id, new_status='off') }}" class="text-blue-500 ml-2 group flex pl-6">
-                                    <i class="fa-regular fa-square text-green-600 group-hover:hidden"></i>
-                                    <i class="fa-regular fa-square-check text-green-600 hidden group-hover:block"></i>
-                                </a>
-                                
-                            </div>
-                            <div class="p-2">
-                                <a href="{{ url_for('delete', id=document._id) }}" class="text-red-500"><i class="fa-solid fa-trash text-red-600 text-xl hover:text-red-700"></i></a>
-                            </div>
-                        </li>
-                    {% endfor %}
+          
+          <li class="grid grid-cols-12 gap-4 text-center">
+              <div class="p-2">{{ loop.index }}</div>
+              <div class="p-2 col-span-8 text-black text-left">{{ document.task | title }}</div>
+              <div class="p-2 text-green-600 font-bold ">
+                  <!-- <a href="{{ url_for('edit_status', id=document._id, new_status='off') }}" class="text-blue-500 ml-2"><i class="fa-regular {{ 'fa-square-check' if not hover else 'fa-square' }}"></i></a> -->
+                  <a href="{{ url_for('edit_status', id=document._id, new_status='off') }}" class="text-blue-500 ml-2 group flex pl-6">
+                      <i class="fa-regular fa-square text-green-600 group-hover:hidden"></i>
+                      <i class="fa-regular fa-square-check text-green-600 hidden group-hover:block"></i>
+                  </a>
+              </div>
+
+              <!-- Add an edit link -->
+              <div class="p-2">
+                <a href="#" onclick="showEditForm('{{ document._id }}')"><i class="fa-solid fa-pen hover:text-green-600"></i></a>
+              </div>
+                  
+              <div class="p-2">
+                  <a href="{{ url_for('delete', id=document._id) }}" class="text-red-500"><i class="fa-solid fa-trash text-red-600 text-xl hover:text-red-700"></i></a>
+              </div>
+          </li>
+
+          <!-- Add an edit task form (initially hidden) -->
+          <center id="editForm_{{ document._id }}" style="display:none;" >
+            <form action="{{ url_for('edit_task', id=document._id) }}" method="POST">
+                <input type="text" name="new_task" placeholder="Edit task" class="px-4 py-2 rounded-md border w-[250px] mr-4" required value="{{ document.task }}">
+                <button type="submit" class="border p-2 rounded-md bg-green-400 hover:shadow-xl">Update</button>
+            </form>
+          </center>
+
+        {% endfor %}
       </ul>
     </div>
 
@@ -85,6 +103,13 @@
 
   </section>
 
+  <script>
+  // Move the script inside the loop
+  function showEditForm(documentId) {
+    var editForm = document.getElementById('editForm_' + documentId);
+    editForm.style.display = (editForm.style.display === 'none') ? 'block' : 'none';
+  }
+  </script>
 
   <script src="script.js"></script>
 </body>

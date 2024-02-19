@@ -27,6 +27,12 @@ def update_status(document_id, new_status):
     print(f"Matched {result.matched_count} document and modified {result.modified_count} document")
 
 
+def update_task(document_id, new_task):
+    query = {"_id": ObjectId(document_id)}
+    update_data = {"task": new_task}
+    result = collection.update_one(query, {"$set": update_data})
+    print(f"Matched {result.matched_count} document and modified {result.modified_count} document")
+
 
 
 
@@ -70,6 +76,19 @@ def edit_status(id, new_status):
     return redirect(url_for('index'))
 
 
+# @app.route('/edit_task/<id>/<new_task>')
+# def edit_task(id, new_task):
+#     # Update status in MongoDB
+#     update_task(id, new_task)
+
+#     return redirect(url_for('index'))
+
+@app.route('/edit_task/<id>', methods=['POST'])
+def edit_task(id):
+    new_task = request.form.get('new_task')
+    # Update task in MongoDB
+    update_task(id, new_task)
+    return redirect(url_for('index'))
 
 
 
